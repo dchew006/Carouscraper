@@ -306,3 +306,5 @@ def sendmessage():
         message = f'{rows[1]["Title"]} at ${rows[1]["Price"]}.\n\nLink: {rows[1]["Link"]}\n\n ------------------------------'
         url = f'https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={CHAT_ID}&text={message}'
         requests.get(url)
+        
+main()
