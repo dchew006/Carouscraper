@@ -3,6 +3,13 @@ name: run carouscraper.py
 on:
   schedule:
     - cron: '* * * * *' # runs all the time
+  
+  workflows_dispatch: # runs when manually triggered
+    inputs:
+      environment:
+        type: string
+        default: DEV
+        required: true
 
 jobs:
   build:
