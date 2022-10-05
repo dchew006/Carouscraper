@@ -1,8 +1,6 @@
 name: run carouscraper.py
 
-on:
-  schedule:
-    - cron: '* * * * *' # runs all the time
+on: workflow_dispatch
 
 jobs:
   build:
