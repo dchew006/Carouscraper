@@ -1,7 +1,3 @@
-# time how long code takes to run in s
-import time
-start_time = time.time()
-
 import os
 import requests
 import json
@@ -9,8 +5,6 @@ import pandas as pd
 from datetime import datetime
 
 #################### SCRAPER ####################
-# TOKEN = os.environ['TOKEN']
-# CHAT_ID = os.environ['CHAT_ID']
 CHAT_ID = os.environ.get('CHAT_ID')
 TOKEN = os.environ.get('TOKEN')
 query = "Prism PG400"
@@ -315,5 +309,3 @@ def sendmessage():
         
 if __name__ == '__main__':
     main()
-
-print("--- %s seconds ---" % (time.time() - start_time))
