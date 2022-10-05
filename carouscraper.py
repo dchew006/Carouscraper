@@ -307,4 +307,5 @@ def sendmessage():
         url = f'https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={CHAT_ID}&text={message}'
         requests.get(url)
         
-main()
+if __name__ == '__main__':
+    main()
