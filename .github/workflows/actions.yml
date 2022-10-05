@@ -4,7 +4,7 @@ on:
   schedule:
     - cron: '* * * * *' # runs all the time
   
-  workflows_dispatch # runs when manually triggered
+  [workflow_dispatch] # runs when manually triggered
 
 jobs:
   build:
