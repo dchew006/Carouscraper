@@ -9,8 +9,10 @@ import pandas as pd
 from datetime import datetime
 
 #################### SCRAPER ####################
-TOKEN = os.environ['TOKEN']
-CHAT_ID = os.environ['CHAT_ID']
+# TOKEN = os.environ['TOKEN']
+# CHAT_ID = os.environ['CHAT_ID']
+CHAT_ID = os.environ.get('CHAT_ID')
+TOKEN = os.environ.get('TOKEN')
 query = "Prism PG400"
 
 class CarousellScraper:
