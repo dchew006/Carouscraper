@@ -1,6 +1,6 @@
 # time how long code takes to run in s
-# import time
-# start_time = time.time()
+import time
+start_time = time.time()
 
 import os
 import requests
@@ -314,9 +314,4 @@ def sendmessage():
 if __name__ == '__main__':
     main()
 
-# print("--- %s seconds ---" % (time.time() - start_time))
-
-try:
-    print(TOKEN, CHAT_ID)
-except:
-    print('Something went wrong try again')
+print("--- %s seconds ---" % (time.time() - start_time))
