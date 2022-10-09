@@ -293,9 +293,7 @@ class newitems(CarousellScraper):
 #Grabs content
 def main():
     if newitems.todayitems().empty == True:
-        message = "No new items today"
-        url = f'https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={CHAT_ID}&text={message}'
-        requests.get(url)
+        pass
     else:
         sendmessage()
 
