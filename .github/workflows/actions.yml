@@ -3,7 +3,7 @@ name: run carouscraper.py
 on:
   workflow_dispatch:
   schedule:
-    - cron: ''
+    - cron: '0 4,12 * * *'
   
 jobs:
   build:
