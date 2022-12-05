@@ -1,5 +1,4 @@
 # importing libraries
-import pandas as pd
 import requests
 import json
 from datetime import datetime
@@ -10,12 +9,12 @@ import os
 #################### scraper ####################
 CHAT_ID = os.environ.get('CHAT_ID')
 TOKEN = os.environ.get('TOKEN')
-query = 'Prism PG400U'
+query = 'airpods pro 2'
 
 class CarousellScraper:
     def __init__(self):
         self.query = query
-        self.sortby = 'likes'
+        self.sortby = 'price'
         
     # defining the api-endpoint
     def rawjson(self):
@@ -59,14 +58,14 @@ class CarousellScraper:
         link: str
 
     # return cleaned dataframe
-    def dataframe(self):
+    def get_dictionary(self):
         cleanedjson = self.cleanedjson()        
         results = []
         for i in cleanedjson:
             populate = self.Listings(
             title = i['title'],
             description = i['belowFold'][2]['stringContent'],
-            price = i['price'].replace('S$',''),
+            price = i['price'].replace('S$','').replace(',','').strip(),
             photo = i['media'][0]['photoItem']['url'],
             timestamp = datetime.fromtimestamp(i['aboveFold'][0]['timestampContent']['seconds']['low']).strftime('%d-%m-%Y %H:%M'),
             likes= i.get('likesCount',0),
@@ -74,48 +73,46 @@ class CarousellScraper:
             )
             results.append(asdict(populate))
             
-            #return dataframe
-            df = pd.DataFrame(results)
-            
-        return df
+        return results
     
-    def sort_df(self):
-        df = self.dataframe().sort_values(by=self.sortby, ascending=False)
-        #remove the bottom 3% of price outliers
-        df['price'] = df['price'].str.replace(',','')
-        df['price'] = df['price'].str.strip()
-        df['price'] = df['price'].astype(float)
-        df = df[df['price'] > df['price'].quantile(0.03)]
-    
-        return df.reset_index(drop=True)
+    def sort_dictionary(self):
+        dictionary = self.get_dictionary()
+        # remove bottom 3 quantile of price outliers
+        dictionary = [i for i in dictionary if float(
+            i['price']) > (float(i['price']) * 0.03)]
+        # sort by price
+        dictionary = sorted(dictionary, key=lambda x: float(
+            x['price']), reverse=False)
+
+        return dictionary
 
 # find today items
 class newitems(CarousellScraper):
         
-    df = CarousellScraper().sort_df()
-    today = datetime.today().strftime('%d-%m-%Y')
-        
-    def todayitems():
-        df_index = []
-        for index, row in newitems.df.iterrows():
-            if row['timestamp'].split(' ')[0] == newitems.today:
-                df_index.append(index)
-        return newitems.df.iloc[df_index]
+    def today_items(self):
+        products = self.sort_dictionary()
+        today = datetime.today().strftime('%d-%m-%Y')
+        today_items = []
+        for i in products:
+            if i['timestamp'].startswith(today):
+                today_items.append(i)
+        return today_items
 
 #################### LOGIC ####################
 
 #Grabs content
 def main():
-    if newitems.todayitems().empty == True:
+    if newitems().today_items() == []:
         pass
     else:
         sendmessage()
 
 #################### SEND MSG ####################
+
 def sendmessage():
-    df = newitems.todayitems()
-    for rows in df.iterrows():
-        message = f'{rows[1]["title"]} at ${rows[1]["price"]}.\n\nLink: {rows[1]["link"]}\n\n ------------------------------'
+    items = newitems().today_items()
+    for i in items:
+        message = f"{i['title']} at ${i['price']}.\n\nLink: {i['link']}\n\n ------------------------------"
         url = f'https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={CHAT_ID}&text={message}'
         requests.get(url)
         
