@@ -9,7 +9,7 @@ import os
 #################### scraper ####################
 CHAT_ID = os.environ.get('CHAT_ID')
 TOKEN = os.environ.get('TOKEN')
-query = 'airpods pro 2'
+query = 'Prism PG400U'
 
 class CarousellScraper:
     def __init__(self):
