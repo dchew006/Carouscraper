@@ -1,5 +1,4 @@
 # importing libraries
-
 import pandas as pd
 import requests
 import json
@@ -48,51 +47,31 @@ class CarousellScraper:
             
         return cleanedjson
 
+    # define dataclass
+    @dataclass
+    class Listings:
+        title: str
+        description: str
+        price: float
+        photo: str
+        likes: int
+        timestamp: str
+        link: str
 
     # return cleaned dataframe
     def dataframe(self):
-        cleanedjson = self.cleanedjson()
-            
-        # define dataclass
-        @dataclass
-        class Listings:
-            title: str
-            description: str
-            price: float
-            photo: str
-            likes: int
-            timestamp: str
-            link: str
-        
+        cleanedjson = self.cleanedjson()        
         results = []
         for i in cleanedjson:
+            populate = self.Listings(
             title = i['title'],
-            price = i['price'].replace('S$',''),
             description = i['belowFold'][2]['stringContent'],
-            timestamp = datetime.fromtimestamp(i['aboveFold'][0]['timestampContent']['seconds']['low']).strftime('%d-%m-%Y %H:%M'),
+            price = i['price'].replace('S$',''),
             photo = i['media'][0]['photoItem']['url'],
-            link = "https://www.carousell.sg/p/{}/".format(i['id'])
-
-            try:
-                likes = i['likesCount']
-            except KeyError:
-                likes = 0
-
-            title = title[0]
-            price = price[0]
-            description = description[0]
-            timestamp = timestamp[0]
-
-
-            populate = Listings(title=title,
-                                description= description,
-                                price= price,
-                                photo= photo,
-                                likes= likes,
-                                timestamp=timestamp,
-                                link = link
-                                )
-
+            timestamp = datetime.fromtimestamp(i['aboveFold'][0]['timestampContent']['seconds']['low']).strftime('%d-%m-%Y %H:%M'),
+            likes= i.get('likesCount',0),
+            link = "https://www.carousell.sg/p/{}/".format(i['id']),
+            )
             results.append(asdict(populate))
             
             #return dataframe
