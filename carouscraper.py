@@ -24,10 +24,11 @@ class CarousellScraper:
         payload = {
             "bestMatchEnabled": True,
             "count": 1000,
+            "countryId": "1880251",
             "query": query}
         headers = {
-            "Cookie": "latra=1669852800000; _t=t%3D1669838065718%26u%3D1297429; jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEyOTc0MjkiLCJpc3MiOiJjIiwiaXNzdWVkX2F0IjoxNjY5MTM5MzAwLCJzZWNyZXQiOiI3MzAzIiwidXNlciI6InNlbGxhdGNoZXcifQ.fbGWHDCcMIZg0mPHkxj2Oy2VxveBnzfOmupxgHDivHQ; siv_2=fe5f6971-b060-45f7-bfd4-b1767735606d; _t2=j0-0GyrCgJ; _csrf=gir89q_VPdOzg8WyuX1EGJSd",
-            "csrf-token": "CtC6rZlx-c1P-WIqoPobaqlVk4gt0qZ9MzPI",}
+            "Cookie": "siv_2=68b52819-ed33-4a7a-8a13-0e17b4d210c9; latra=1671580800000; _t=a%3DebN4FBatsr%26t%3D1671597913540; _t2=j0-0GyrCgJ; _csrf=gir89q_VPdOzg8WyuX1EGJSd",
+            "csrf-token": "EwPaedt5-nYVV8lTJbhybxUDUEVkXQVznDtc", }
         response = requests.request("POST", url, json=payload, headers=headers)
         datajson = json.loads(response.text)['data']['results']
         
